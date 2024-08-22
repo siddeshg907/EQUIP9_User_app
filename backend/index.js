@@ -4,7 +4,11 @@ const {userRouter}=require("./routes/user.routes")
 const cors=require("cors")
 require("dotenv").config()
 
+const path=require("path")
 
+
+
+const __dirname=path.resolve()
 
 
 
@@ -20,6 +24,11 @@ app.get("/",(req,res)=>{
 
 app.use("/api/users",userRouter)
 
+app.use(express.static(path.join(__dirname,"/frontend/dist")))
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+  })
 
 app.listen(3000,async()=>{
     try {
