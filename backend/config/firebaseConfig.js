@@ -4,7 +4,7 @@ import multer from "multer";
 
 
 // Load your Firebase credentials
-import serviceAccount from './equip9-b9d1e-firebase-adminsdk-v5ey1-6725724495.json';
+import serviceAccount from './equip9-b9d1e-firebase-adminsdk-v5ey1-6725724495.json' assert { type: "json" };
 
 // Initialize Firebase Admin SDK
 admin.initializeApp({
