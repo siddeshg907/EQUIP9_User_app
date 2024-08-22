@@ -1,9 +1,13 @@
-const express = require("express");
-const { connection } = require("./db");
-const { userRouter } = require("./routes/user.routes");
-const cors = require("cors");
-require("dotenv").config();
-const path = require("path");
+import express from 'express';
+import { connection } from './db.js';
+import { userRouter } from './routes/user.routes.js';
+import cors from 'cors';
+import path from 'path';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
+
 
 const app = express();
 app.use(express.json());
@@ -25,7 +29,7 @@ app.listen(3000, async () => {
     }
 });
 
-// Serve static files from the React app
+const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
 app.get('*', (req, res) => {

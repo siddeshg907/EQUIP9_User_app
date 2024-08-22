@@ -1,9 +1,10 @@
 // firebaseConfig.js
-const admin = require('firebase-admin');
-const multer = require('multer');
+import admin from "firebase-admin";
+import multer from "multer";
+
 
 // Load your Firebase credentials
-const serviceAccount = require('./equip9-b9d1e-firebase-adminsdk-v5ey1-6725724495.json');
+import serviceAccount from './equip9-b9d1e-firebase-adminsdk-v5ey1-6725724495.json';
 
 // Initialize Firebase Admin SDK
 admin.initializeApp({
@@ -18,4 +19,4 @@ const upload = multer({
     storage: multer.memoryStorage() // Store file in memory before uploading to Firebase
 });
 
-module.exports = { admin, bucket, upload };
+export { admin, bucket, upload };

@@ -1,10 +1,12 @@
-const express=require("express")
-const bcrypt=require("bcrypt")
-require("dotenv").config()
-const {UserModel}=require("../model/user.model")
-const  jwt=require("jsonwebtoken")
-const { auth } = require("../middlewares/auth.middleware")
-const { upload, bucket } = require("../config/firebaseConfig")
+import express from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { UserModel } from '../model/user.model.js';
+import { auth } from '../middlewares/auth.middleware.js';
+import { upload, bucket } from '../config/firebaseConfig.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const userRouter=express.Router()
 
@@ -75,6 +77,4 @@ userRouter.get("/me", auth, async (req, res) => {
 });
 
 
-module.exports={
-    userRouter
-}
+export { userRouter };
