@@ -15,39 +15,32 @@ userRouter.post("/register", upload.single('avatar'), async (req, res) => {
         return res.status(400).json({ msg: "No file uploaded" });
     }
 
+     // Check if the mobile number already exists
+  const existingUser = await UserModel.findOne({ mobile });
+
+  if (existingUser) {
+    return res.status(400).json({ msg: 'Mobile number already registered' });
+  }
+
     try {
-        const blob = bucket.file(Date.now().toString() + '-' + req.file.originalname);
-        const blobStream = blob.createWriteStream({
-            metadata: {
-                contentType: req.file.mimetype
-            }
+        const fileName = Date.now().toString() + '-' + req.file.originalname;
+        const blob = bucket.file(fileName);
+
+        await blob.save(req.file.buffer, {
+            metadata: { contentType: req.file.mimetype },
         });
 
-        blobStream.on('error', (err) => {
-            res.status(500).json({ error: err.message });
-        });
+        const avatar = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(fileName)}?alt=media`;
 
-        blobStream.on('finish', async () => {
-            const avatar = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(blob.name)}?alt=media`;
+        const hashedPassword = await bcrypt.hash(pass, 5);
+        const user = new UserModel({ firstName, lastName, mobile, pass: hashedPassword, avatar });
+        await user.save();
 
-            bcrypt.hash(pass, 5, async (err, hash) => {
-                if (err) {
-                    res.status(400).json({ error: err.message });
-                    return;
-                }
-
-                const user = new UserModel({ firstName, lastName, mobile, pass: hash, avatar });
-                await user.save();
-                res.status(200).json({ msg: "A new user registered successfully" });
-            });
-        });
-
-        blobStream.end(req.file.buffer);
+        res.status(200).json({ msg: "A new user registered successfully" });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 });
-
 
 
 userRouter.post("/login",async(req,res)=>{
@@ -57,7 +50,7 @@ userRouter.post("/login",async(req,res)=>{
       bcrypt.compare(pass,user.pass,async(err,result)=>{
                 if(result){
                     const token=jwt.sign({userID:user._id,mobile:user.mobile},process.env.key)
-                    res.status(200).json({msg:"Login Successfully!",token})
+                    res.status(200).json({msg:"Login Successfully!",token,userId:user._id})
                 }else{
                     res.status(200).json({msg:"wrong credentials"})
                 }

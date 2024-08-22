@@ -11,7 +11,7 @@ function RegistrationPage() {
     avatar: null,
   });
   const [message, setMessage] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,70 +41,81 @@ function RegistrationPage() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/users/register', data, {
+      await axios.post('http://localhost:8080/users/register', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       setMessage('Registration successful!');
-      navigate('/login'); // Use navigate to redirect
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (error) {
-      setMessage('Error registering user: ' + (error.response?.data?.msg || error.message));
+      if (error.response?.data?.msg === 'Mobile number already registered') {
+        setMessage('This mobile number is already registered.');
+      } else {
+        setMessage('Error registering user: ' + (error.response?.data?.msg || error.message));
+      }
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl mb-6 text-center">Register</h2>
-        {message && <p className="text-red-500 mb-4">{message}</p>}
+        <h2 className="text-2xl mb-6 text-center font-semibold">Register</h2>
+        {message && <p className={`mb-4 ${message.includes('successful') ? 'text-green-500' : 'text-red-500'}`}>{message}</p>}
         <div className="mb-4">
-          <label className="block mb-1">First Name</label>
+          <label className="block mb-1 font-medium">First Name</label>
           <input
             type="text"
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Last Name</label>
+          <label className="block mb-1 font-medium">Last Name</label>
           <input
             type="text"
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Mobile Number</label>
+          <label className="block mb-1 font-medium">Mobile Number</label>
           <input
             type="text"
             name="mobile"
             value={formData.mobile}
             onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Password</label>
+          <label className="block mb-1 font-medium">Password</label>
           <input
             type="password"
             name="pass"
             value={formData.pass}
             onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Avatar</label>
+          <label className="block mb-1 font-medium">Profile Picture</label>
           <input
             type="file"
             name="avatar"
             onChange={handleFileChange}
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            accept="image/*"
           />
         </div>
         <button
@@ -113,7 +124,9 @@ function RegistrationPage() {
         >
           Register
         </button>
+        <a href='/login'>already user</a>
       </form>
+      
     </div>
   );
 }
