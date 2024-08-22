@@ -15,7 +15,7 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/users/login', formData);
+      const response = await axios.post('https://equip9-user-app-1.onrender.com/api/users/login', formData);
       const { token, userId } = response.data;
 
       // Store token and userId in localStorage
