@@ -15,7 +15,7 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/users/login', formData);
+      const response = await axios.post('/api/users/login', formData);
       const { token, userId } = response.data;
 
       // Store token and userId in localStorage

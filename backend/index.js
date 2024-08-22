@@ -18,14 +18,14 @@ app.get("/",(req,res)=>{
     res.status(200).send({"msg":"This is Hompe Page"})
 })
 
-app.use("/users",userRouter)
+app.use("/api/users",userRouter)
 
 
-app.listen(process.env.port,async()=>{
+app.listen(3000,async()=>{
     try {
         await connection
         console.log("Connected to the DB")
-        console.log(`server is running on ${process.env.port}`)
+        console.log(`server is running on 3000`)
     } catch (error) {
         console.log(error)
     }

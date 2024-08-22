@@ -14,7 +14,7 @@ function HomePage() {
     }
 
     axios
-      .get('http://localhost:8080/users/me', {
+      .get('/api/users/me', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {

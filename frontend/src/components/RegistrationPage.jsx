@@ -41,7 +41,7 @@ function RegistrationPage() {
     }
 
     try {
-      await axios.post('http://localhost:8080/users/register', data, {
+      await axios.post('/api/users/register', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

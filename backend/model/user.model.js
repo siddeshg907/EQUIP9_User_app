@@ -3,7 +3,11 @@ const mongoose=require("mongoose")
 const userSchema= mongoose.Schema({
     firstName:String,
     lastName:String,
-    mobile:String,
+    mobile:{
+        type:String,
+        required:true,
+        unique:true,
+    },
     pass:String,
     avatar:String
 },{
