@@ -25,7 +25,7 @@ userRouter.post("/register", upload.single('avatar'), async (req, res) => {
             metadata: { contentType: req.file.mimetype },
         });
 
-        const avatar = https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(fileName)}?alt=media;
+        const avatar = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(fileName)}?alt=media`;
 
         const hashedPassword = await bcrypt.hash(pass, 5);
         const user = new UserModel({ firstName, lastName, mobile, pass: hashedPassword, avatar });
