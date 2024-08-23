@@ -11,20 +11,20 @@ dotenv.config();
 const userRouter=express.Router()
 
 userRouter.post("/register", upload.single('avatar'), async (req, res) => {
-    const { firstName, lastName, mobile, pass } = req.body;
-
-    if (!req.file) {
-        return res.status(400).json({ msg: "No file uploaded" });
-    }
-
-    // Check if the mobile number already exists
-    const existingUser = await UserModel.findOne({ mobile });
-
-    if (existingUser) {
-        return res.status(400).json({ msg: 'Mobile number already registered' });
-    }
-
     try {
+        const { firstName, lastName, mobile, pass } = req.body;
+
+        if (!req.file) {
+            return res.status(400).json({ msg: "No file uploaded" });
+        }
+
+        // Check if the mobile number already exists
+        const existingUser = await UserModel.findOne({ mobile });
+
+        if (existingUser) {
+            return res.status(400).json({ msg: 'Mobile number already registered' });
+        }
+
         const fileName = Date.now().toString() + '-' + req.file.originalname;
         const blob = bucket.file(fileName);
 
@@ -35,14 +35,24 @@ userRouter.post("/register", upload.single('avatar'), async (req, res) => {
         const avatar = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(fileName)}?alt=media`;
 
         const hashedPassword = await bcrypt.hash(pass, 5);
-        const user = new UserModel({ firstName, lastName, mobile, pass: hashedPassword, avatar });
+
+        const user = new UserModel({
+            firstName,
+            lastName,
+            mobile,
+            pass: hashedPassword,
+            avatar
+        });
+
         await user.save();
 
         res.status(200).json({ msg: "A new user registered successfully" });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error("Error in user registration:", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 
 
