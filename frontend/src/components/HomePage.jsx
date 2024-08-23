@@ -14,7 +14,7 @@ function HomePage() {
     }
 
     axios
-      .get('https://equip9-user-app-1.onrender.com/api/users/me', {
+      .get('/api/users/me', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
