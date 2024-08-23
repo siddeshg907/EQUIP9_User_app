@@ -41,7 +41,7 @@ function RegistrationPage() {
     }
 
     try {
-      await axios.post('https://equip9-user-app-1.onrender.com/api/users/regiter', data, {
+      await axios.post('/api/users/register', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
