@@ -17,12 +17,12 @@ userRouter.post("/register", upload.single('avatar'), async (req, res) => {
         return res.status(400).json({ msg: "No file uploaded" });
     }
 
-     // Check if the mobile number already exists
-  const existingUser = await UserModel.findOne({ mobile });
+    // Check if the mobile number already exists
+    const existingUser = await UserModel.findOne({ mobile });
 
-  if (existingUser) {
-    return res.status(400).json({ msg: 'Mobile number already registered' });
-  }
+    if (existingUser) {
+        return res.status(400).json({ msg: 'Mobile number already registered' });
+    }
 
     try {
         const fileName = Date.now().toString() + '-' + req.file.originalname;
@@ -43,6 +43,7 @@ userRouter.post("/register", upload.single('avatar'), async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
 
 
 userRouter.post("/login",async(req,res)=>{

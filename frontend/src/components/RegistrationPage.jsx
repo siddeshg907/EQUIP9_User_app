@@ -40,6 +40,8 @@ function RegistrationPage() {
       data.append('avatar', formData.avatar);
     }
 
+    
+
     try {
       await axios.post('/api/users/register', data, {
         headers: {
@@ -54,10 +56,13 @@ function RegistrationPage() {
       if (error.response?.data?.msg === 'Mobile number already registered') {
         setMessage('This mobile number is already registered.');
       } else {
+        console.dir(error)
         setMessage('Error registering user: ' + (error.response?.data?.msg || error.message));
       }
     }
   };
+
+  
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
